@@ -271,9 +271,9 @@ GameObject:
   m_Component:
   - component: {fileID: 707916501}
   - component: {fileID: 707916505}
+  - component: {fileID: 707916507}
   - component: {fileID: 707916509}
   - component: {fileID: 707916508}
-  - component: {fileID: 707916507}
   - component: {fileID: 707916506}
   - component: {fileID: 707916510}
   m_Layer: 0
@@ -371,7 +371,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 707916500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1d2c644fa88dd7c6b866a6daba88677, type: 3}
+  m_Script: {fileID: 11500000, guid: 06bfa352853ecbe05b0574f1cb8176eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
@@ -393,16 +393,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 3
+    VectorObservationSize: 2
     NumStackedVectorObservations: 1
     m_ActionSpec:
-      m_NumContinuousActions: 3
+      m_NumContinuousActions: 2
       BranchSizes: 01000000
     VectorActionSize: 
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: f7de4639f2e052268964a8f26a31808b, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Target Seeking Agent

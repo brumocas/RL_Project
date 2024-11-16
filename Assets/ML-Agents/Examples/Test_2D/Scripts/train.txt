@@ -1,0 +1,2 @@
+mlagents-learn config/ppo/TargetSeekingAgent.yaml --run-id=TargetSeekingAgent_001 --train
+train is deprecated (its the default now)
