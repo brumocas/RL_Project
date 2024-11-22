@@ -377,7 +377,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
+  MaxStep: 2500
   target: {fileID: 257739415}
   moveSpeed: 2
 --- !u!114 &707916509
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 2
+    VectorObservationSize: 4
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -405,7 +405,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: Target Seeking Agent
+  m_BehaviorName: TargetSeakingAgent
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1

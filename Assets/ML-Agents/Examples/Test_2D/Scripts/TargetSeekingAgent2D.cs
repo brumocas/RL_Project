@@ -8,6 +8,8 @@ public class TargetSeekingAgent2D : Agent
     [SerializeField] private Transform target;        // The target the agent seeks
     [SerializeField] private float moveSpeed = 2f;    // Movement speed of the agent
 
+    float previousDistanceToTarget;
+
     public override void OnEpisodeBegin()
     {
         // Reset the agent's position at the start of each episode
@@ -45,22 +47,31 @@ public class TargetSeekingAgent2D : Agent
         transform.localPosition += move;
 
         // Calculate the distance to the target for reward calculation
-        float distanceToTarget = Vector2.Distance(new Vector2(transform.localPosition.x, transform.localPosition.z), 
-                                                  new Vector2(target.localPosition.x, target.localPosition.z));
+        float distanceToTarget = Vector2.Distance(
+            new Vector2(transform.localPosition.x, transform.localPosition.z),
+            new Vector2(target.localPosition.x, target.localPosition.z)
+        );
 
-        // Give a small penalty for each step to encourage faster completion
-        AddReward(-0.001f);
+        // Reward based on progress
+        float progress = previousDistanceToTarget - distanceToTarget;
+        AddReward(progress * 0.1f);
 
-        // Log the distance to the target for debugging purposes
-        Debug.Log($"Distance to Target: {distanceToTarget}");
+        // Penalty for moving too far or stagnating
+        if (distanceToTarget > 25.0f)
+        {
+            AddReward(-1.0f);  // Penalize for wandering too far
+            EndEpisode();
+        }
 
-        // Give a reward and end the episode if the agent reaches the target
+        // Reward for reaching the target
         if (distanceToTarget < 1.0f)
         {
-            Debug.Log("Target Reached! Adding Reward.");
-            AddReward(1.0f);  // Add reward when the agent reaches the target
-            EndEpisode();     // End the episode
+            AddReward(2.0f);
+            EndEpisode();
         }
+
+        // Update the previous distance
+        previousDistanceToTarget = distanceToTarget;
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
