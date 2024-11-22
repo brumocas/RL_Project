@@ -33,6 +33,7 @@ TagManager:
   - ex
   - plus
   - Walls
+  - Goal
   layers:
   - Default
   - TransparentFX
