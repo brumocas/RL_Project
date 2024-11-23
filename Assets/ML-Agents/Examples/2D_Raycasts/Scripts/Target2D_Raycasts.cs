@@ -5,7 +5,10 @@ using Unity.MLAgents.Sensors;
 
 public class Target2D_Raycasts : Agent
 {
-    [SerializeField] private Transform target;        // The target the agent seeks
+    [SerializeField] private Transform target_1;        // The target the agent seeks
+    //[SerializeField] private Transform target_2;        // The target the agent seeks
+    //[SerializeField] private Transform target_3;        // The target the agent seeks
+    //[SerializeField] private Transform target_4;        // The target the agent seeks
     [SerializeField] private float moveSpeed = 5f;    // Movement speed of the agent
     private float previousDistanceToTarget;
 
@@ -25,11 +28,28 @@ public class Target2D_Raycasts : Agent
         // Reset the agent's position
         transform.localPosition = new Vector3(Random.Range(-23f, 23f), 0.5f, Random.Range(-23f, 23f));
 
+        // Reset the agent's rotation
+        transform.localRotation = Quaternion.Euler(
+            0, // rotation in X-axis
+            0, // rotation in Y-axis
+            0 // rotation in Z-axis
+        );
+
         // Randomize the target position
-        target.localPosition = new Vector3(Random.Range(-23f, 23f), 1.22f, Random.Range(-23f, 23f));
+        target_1.localPosition = new Vector3(Random.Range(-23f, 23f), 1.22f, Random.Range(-23f, 23f));
+
+        // Randomize the target position
+        //target_2.localPosition = new Vector3(Random.Range(-23f, 23f), 1.22f, Random.Range(-23f, 23f));
+
+        // Randomize the target position
+        //target_3.localPosition = new Vector3(Random.Range(-23f, 23f), 1.22f, Random.Range(-23f, 23f));
+
+        // Randomize the target position
+        //target_4.localPosition = new Vector3(Random.Range(-23f, 23f), 1.22f, Random.Range(-23f, 23f));
+
 
         // Print positions
-        Debug.Log($"Episode Start - Agent Position: {transform.localPosition}, Target Position: {target.localPosition}");
+        //Debug.Log($"Episode Start - Agent Position: {transform.localPosition}, Target Position: {target.localPosition}");
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -65,7 +85,7 @@ public class Target2D_Raycasts : Agent
         if (collision.collider.CompareTag("Walls"))
         {
             Debug.Log("Hit Wall! Applying penalty.");
-            AddReward(-0.5f);
+            AddReward(-5f);
             // Uncomment to end the episode if hitting a wall is critical
             EndEpisode();
         }
@@ -73,7 +93,7 @@ public class Target2D_Raycasts : Agent
         if (collision.collider.CompareTag("Goal"))
         {
             Debug.Log("Found Target! Great");
-            AddReward(5f);
+            AddReward(10f);
             EndEpisode();
         }
     }
