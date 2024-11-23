@@ -26,7 +26,8 @@ public class Maze_Raycasts : Agent
         transform.localPosition = new Vector3(0f, 0.5f, 0f);
 
         // Randomize the target position
-        target.localPosition = new Vector3(0f, 1.22f, -20f);   
+        target.localPosition = new Vector3(5f, 1.22f, -10f);
+        //target.localPosition = new Vector3(7.5f, 1.22f, -1.5f);   
         // Print positions
         Debug.Log($"Episode Start - Agent Position: {transform.localPosition}, Target Position: {target.localPosition}");
     }
@@ -49,6 +50,7 @@ public class Maze_Raycasts : Agent
         rb.MovePosition(transform.position + transform.forward * moveForward * moveSpeed * Time.deltaTime);
         transform.Rotate(0f, moveRotate * moveSpeed, 0f, Space.Self);
 
+        AddReward(-0.01f);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
