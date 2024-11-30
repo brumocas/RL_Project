@@ -1,0 +1,65 @@
+{
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.5.1+cu124"
+    },
+    "Target2D_Raycasts": {
+        "checkpoints": [
+            {
+                "steps": 999980,
+                "file_path": "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-999980.onnx",
+                "reward": 9.838000297546387,
+                "creation_time": 1732873282.4981592,
+                "auxillary_file_paths": [
+                    "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-999980.pt"
+                ]
+            },
+            {
+                "steps": 1026162,
+                "file_path": "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-1026162.onnx",
+                "reward": 9.847166538238525,
+                "creation_time": 1732873332.250494,
+                "auxillary_file_paths": [
+                    "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-1026162.pt"
+                ]
+            },
+            {
+                "steps": 1499949,
+                "file_path": "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-1499949.onnx",
+                "reward": 6.653999964396159,
+                "creation_time": 1732874514.6362624,
+                "auxillary_file_paths": [
+                    "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-1499949.pt"
+                ]
+            },
+            {
+                "steps": 1500013,
+                "file_path": "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-1500013.onnx",
+                "reward": 6.653999964396159,
+                "creation_time": 1732874514.6627874,
+                "auxillary_file_paths": [
+                    "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-1500013.pt"
+                ]
+            },
+            {
+                "steps": 1898974,
+                "file_path": "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-1898974.onnx",
+                "reward": 9.774332890907923,
+                "creation_time": 1732874971.9607189,
+                "auxillary_file_paths": [
+                    "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-1898974.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1898974,
+            "file_path": "results/Raycasts2D_001/Target2D_Raycasts.onnx",
+            "reward": 9.774332890907923,
+            "creation_time": 1732874971.9607189,
+            "auxillary_file_paths": [
+                "results/Raycasts2D_001/Target2D_Raycasts/Target2D_Raycasts-1898974.pt"
+            ]
+        }
+    }
+}

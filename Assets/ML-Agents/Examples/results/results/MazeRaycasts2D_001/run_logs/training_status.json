@@ -1,0 +1,29 @@
+{
+    "Maze_Raycasts": {
+        "checkpoints": [
+            {
+                "steps": 70329,
+                "file_path": "results/MazeRaycasts2D_001/Maze_Raycasts/Maze_Raycasts-70329.onnx",
+                "reward": 9.918000221252441,
+                "creation_time": 1732988985.703839,
+                "auxillary_file_paths": [
+                    "results/MazeRaycasts2D_001/Maze_Raycasts/Maze_Raycasts-70329.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 70329,
+            "file_path": "results/MazeRaycasts2D_001/Maze_Raycasts.onnx",
+            "reward": 9.918000221252441,
+            "creation_time": 1732988985.703839,
+            "auxillary_file_paths": [
+                "results/MazeRaycasts2D_001/Maze_Raycasts/Maze_Raycasts-70329.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.5.1+cu124"
+    }
+}

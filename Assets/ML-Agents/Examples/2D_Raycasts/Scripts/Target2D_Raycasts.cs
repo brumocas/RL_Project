@@ -6,11 +6,14 @@ using Unity.MLAgents.Sensors;
 public class Target2D_Raycasts : Agent
 {
     [SerializeField] private Transform target_1;        // The target the agent seeks
-    //[SerializeField] private Transform target_2;        // The target the agent seeks
-    //[SerializeField] private Transform target_3;        // The target the agent seeks
-    //[SerializeField] private Transform target_4;        // The target the agent seeks
     [SerializeField] private float moveSpeed = 5f;    // Movement speed of the agent
     private float previousDistanceToTarget;
+    private float distance2Target;
+    private float minDeltaTime;
+    private bool foudPosition = false;
+    private float target_1_x;
+    private float target_1_y;
+    private float target_1_z;
 
     private Rigidbody rb;
 
@@ -24,7 +27,11 @@ public class Target2D_Raycasts : Agent
     }
 
     public override void OnEpisodeBegin()
-    {
+    {      
+        
+        // Reset Pos
+        foudPosition = false;
+
         // Reset the agent's position
         transform.localPosition = new Vector3(Random.Range(-23f, 23f), 0.5f, Random.Range(-23f, 23f));
 
@@ -34,22 +41,27 @@ public class Target2D_Raycasts : Agent
             0, // rotation in Y-axis
             0 // rotation in Z-axis
         );
+        
+        // Target y position already defined (plane)
+        target_1_y = 1.22f;
+        while(!foudPosition)
+        {
+            // Randomize the target position
+            target_1_x = Random.Range(-23f, 23f);
+            target_1_z = Random.Range(-23f, 23f);
+            
+            // Calculate distance to target_1
+            distance2Target = Vector2.Distance(new Vector2(transform.localPosition.x, transform.localPosition.z), new Vector2(target_1_x, target_1_z));
 
-        // Randomize the target position
-        target_1.localPosition = new Vector3(Random.Range(-23f, 23f), 1.22f, Random.Range(-23f, 23f));
+            // Threshold
+            if (distance2Target > 0.2)
+                foudPosition = true;
 
-        // Randomize the target position
-        //target_2.localPosition = new Vector3(Random.Range(-23f, 23f), 1.22f, Random.Range(-23f, 23f));
+            // Calculate minDeltaTime
+            minDeltaTime = distance2Target/moveSpeed;
+        }
 
-        // Randomize the target position
-        //target_3.localPosition = new Vector3(Random.Range(-23f, 23f), 1.22f, Random.Range(-23f, 23f));
-
-        // Randomize the target position
-        //target_4.localPosition = new Vector3(Random.Range(-23f, 23f), 1.22f, Random.Range(-23f, 23f));
-
-
-        // Print positions
-        //Debug.Log($"Episode Start - Agent Position: {transform.localPosition}, Target Position: {target.localPosition}");
+        target_1.localPosition = new Vector3(target_1_x, target_1_y, target_1_z);
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -70,6 +82,12 @@ public class Target2D_Raycasts : Agent
         rb.MovePosition(transform.position + transform.forward * moveForward * moveSpeed * Time.deltaTime);
         transform.Rotate(0f, moveRotate * moveSpeed, 0f, Space.Self);
 
+        // Rotation Penalty 
+        float rotationPenalty = Mathf.Abs(actions.ContinuousActions[0]);
+        AddReward(-rotationPenalty * 0.01f);
+
+        // Apply Penalty
+        AddReward(-2*Time.deltaTime/minDeltaTime);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -86,7 +104,6 @@ public class Target2D_Raycasts : Agent
         {
             Debug.Log("Hit Wall! Applying penalty.");
             AddReward(-5f);
-            // Uncomment to end the episode if hitting a wall is critical
             EndEpisode();
         }
 
