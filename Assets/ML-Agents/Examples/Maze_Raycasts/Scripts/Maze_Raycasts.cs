@@ -2,16 +2,14 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using System.Collections.Generic;
 
 public class Maze_Raycasts : Agent
 {
-    [SerializeField] private Transform target_1;        // The target the agent seeks
-    [SerializeField] private Transform target_2;        // The target the agent seeks
-    [SerializeField] private Transform target_3;        // The target the agent seeks
-    [SerializeField] private Transform target_4;        // The target the agent seeks
-    [SerializeField] private float moveSpeed = 5f;    // Movement speed of the agent
-    private float previousDistanceToTarget;
+    [SerializeField] private List<Transform> targets = new List<Transform>(); // List of targets
+    [SerializeField] private float moveSpeed = 2f;
 
+    private int targetCounter = 0;
     private Rigidbody rb;
 
     public override void Initialize()
@@ -23,136 +21,117 @@ public class Maze_Raycasts : Agent
         }
     }
 
-
     public override void OnEpisodeBegin()
     {
-    // Reset the agent's position
-    transform.localPosition = GenerateValidPosition(0.5f);
+        // Reset agent's position and rotation
+        transform.localPosition = new Vector3(-21f, 0.5f, -21f);
+        transform.localRotation = Quaternion.Euler(0, 0, 0);
+        rb.velocity = Vector3.zero;
 
-    // Reset the agent's rotation
-    transform.localRotation = Quaternion.Euler(
-        0, // rotation in X-axis
-        0, // rotation in Y-axis
-        0 // rotation in Z-axis
-    );
-
-    // Set the target position
-    //target_1.localPosition = GenerateValidPosition(1.22f);
-    target_1.localPosition = new Vector3(-13f, 1.22f, 8f);
-    // Set the target position
-    //target_2.localPosition = GenerateValidPosition(1.22f);
-    target_2.localPosition = new Vector3(12f, 1.22f, 10f);
-    // Set the target position
-    //target_3.localPosition = GenerateValidPosition(1.22f);
-    target_3.localPosition = new Vector3(4.2f, 1.22f, -17.5f);
-    // Set the target position
-    //target_4.localPosition = GenerateValidPosition(1.22f);
-    target_4.localPosition = new Vector3(-12f, 1.22f, -22f);
-
-    // Print positions for debugging
-    //Debug.Log($"Episode Start - Agent Position: {transform.localPosition}, Target Position: {target_1.localPosition}");
+        // Reset targets    
+        targetCounter = 0;
+        SetTargetPositions();
     }
 
-    // Method to generate a valid position
-    private Vector3 GenerateValidPosition(float yHeight)
+    private void SetTargetPositions()
     {
-    const int maxAttempts = 100; // Limit attempts to prevent infinite loops
-    int attempts = 0;
-
-    while (attempts < maxAttempts)
-    {
-        attempts++;
-
-        // Generate a random position within defined bounds
-        Vector3 potentialPosition = new Vector3(
-            //Random.Range(-23f, 23f),  // Adjust bounds based on maze size
-            Random.Range(-23f, 23f),
-            yHeight,
-            Random.Range(-23f, 23f)
-            //Random.Range(-23f, 23f)
-        );
-
-        // Check if position is valid
-        if (IsValidPosition(potentialPosition))
-        {
-            return potentialPosition;
-        }
+        // Using the target list to set their positions
+        targets[0].localPosition = new Vector3(-21f, 1.22f, -3f);
+        targets[1].localPosition = new Vector3(-21f, 1.22f, 22f);
+        targets[2].localPosition = new Vector3(-5f, 1.22f, 22f);
+        targets[3].localPosition = new Vector3(-5f, 1.22f, 16f);
+        targets[4].localPosition = new Vector3(-14f, 1.22f, 16f);
+        targets[5].localPosition = new Vector3(-14f, 1.22f, 9f);
+        targets[6].localPosition = new Vector3(1f, 1.22f, 9f);
+        targets[7].localPosition = new Vector3(1f, 1.22f, -3f);
+        targets[8].localPosition = new Vector3(1f, 1.22f, -22f);
+        targets[9].localPosition = new Vector3(8f, 1.22f, -22f);
+        targets[10].localPosition = new Vector3(8f, 1.22f, -3f);
+        targets[11].localPosition = new Vector3(8f, 1.22f, 9f);
+        targets[12].localPosition = new Vector3(16f, 1.22f, 9f);
+        targets[13].localPosition = new Vector3(16f, 1.22f, -3f);
+        targets[14].localPosition = new Vector3(16f, 1.22f, -22f);
+        targets[15].localPosition = new Vector3(16f, 1.22f, -22f);
+        targets[16].localPosition = new Vector3(22f, 1.22f, -22f);
+        targets[17].localPosition = new Vector3(22f, 1.22f, 22f);
     }
-
-    Debug.LogWarning("Failed to find a valid position after max attempts. Returning default position.");
-    return new Vector3(0f, yHeight, 0f); // Default fallback position
-    }
-
-
-    // Method to validate a position
-    private bool IsValidPosition(Vector3 position)
-    {
-    // Check for collisions using a small sphere
-    Collider[] hitColliders = Physics.OverlapSphere(position, 0.5f); // Adjust radius as needed
-    foreach (Collider hitCollider in hitColliders)
-    {
-        if (hitCollider.CompareTag("Walls")) // Invalid if overlapping a wall
-        {
-            return false;
-        }
-
-        if (hitCollider.CompareTag("Goal")) // Invalid if overlapping a Target
-        {
-            return false;
-        }
-    }
-    return true;
-    }
-
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // Agent position
+        // Add agent's position and velocity
         sensor.AddObservation(transform.localPosition);
-
-        // Target position
-        //sensor.AddObservation(target.localPosition);
+        
+        // Optionally add agent's velocity if needed
+        sensor.AddObservation(rb.velocity);
+        
+        // Add relative position of all targets to the agent's observation
+        foreach (Transform target in targets)
+        {
+            sensor.AddObservation(target.localPosition - transform.localPosition);
+        }
     }
 
+    private Transform GetCurrentTarget()
+    {
+        // Returns the current target based on the targetCounter
+        if (targetCounter < targets.Count)
+        {
+            return targets[targetCounter];
+        }
+        return null;
+    }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
         float moveRotate = actions.ContinuousActions[0]; // Rotation
         float moveForward = actions.ContinuousActions[1]; // Forward movement
 
-        // Apply movement
+        // Apply movement and rotation
         rb.MovePosition(transform.position + transform.forward * moveForward * moveSpeed * Time.deltaTime);
-        transform.Rotate(0f, moveRotate * moveSpeed, 0f, Space.Self);
+        transform.Rotate(0f, moveRotate * (moveSpeed / 2), 0f, Space.Self);
 
+        // Add small time penalty to encourage faster learning
         AddReward(-0.001f);
     }
 
-
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        // Provide manual control for debugging
+        // Manual control for debugging
         ActionSegment<float> continuousActionsOut = actionsOut.ContinuousActions;
         continuousActionsOut[0] = Input.GetAxis("Horizontal"); // Rotation
         continuousActionsOut[1] = Input.GetAxis("Vertical");   // Forward
     }
 
-
     private void OnCollisionEnter(Collision collision)
-    {   
-
+    {
         if (collision.collider.CompareTag("Walls"))
         {
             Debug.Log("Hit Wall! Applying penalty.");
-            AddReward(-1f);
-            // Uncomment to end the episode if hitting a wall is critical
+            AddReward(-0.5f);
             EndEpisode();
+            return;
         }
 
         if (collision.collider.CompareTag("Goal"))
         {
-            Debug.Log("Found Target! Great");
-            AddReward(10f);
-            EndEpisode();
+            Debug.Log($"Found Target {targetCounter + 1}! Rewarding agent.");
+
+            // Reward and deactivate current target
+            AddReward(targetCounter + 1);
+            DeactivateTarget(targetCounter);
+
+            // If all targets are reached, end the episode
+            if (++targetCounter >= targets.Count)
+            {
+                AddReward(100f); // Final reward for completing the maze
+                EndEpisode();
+            }
         }
+    }
+
+    private void DeactivateTarget(int targetIndex)
+    {
+        // Deactivate target by moving it off-screen
+        targets[targetIndex].localPosition = new Vector3(-100f, -100f, 100f);
     }
 }

@@ -1,0 +1,47 @@
+{
+    "Target2D_Raycasts": {
+        "checkpoints": [
+            {
+                "steps": 476664,
+                "file_path": "results/results/Raycasts2D_003/Target2D_Raycasts/Target2D_Raycasts-476664.onnx",
+                "reward": -9.957148705210004,
+                "creation_time": 1733004739.4579363,
+                "auxillary_file_paths": [
+                    "results/results/Raycasts2D_003/Target2D_Raycasts/Target2D_Raycasts-476664.pt"
+                ]
+            },
+            {
+                "steps": 499963,
+                "file_path": "results/results/Raycasts2D_003/Target2D_Raycasts/Target2D_Raycasts-499963.onnx",
+                "reward": 6.446249294281006,
+                "creation_time": 1733005259.205503,
+                "auxillary_file_paths": [
+                    "results/results/Raycasts2D_003/Target2D_Raycasts/Target2D_Raycasts-499963.pt"
+                ]
+            },
+            {
+                "steps": 803013,
+                "file_path": "results/results/Raycasts2D_003/Target2D_Raycasts/Target2D_Raycasts-803013.onnx",
+                "reward": 7.225876331329346,
+                "creation_time": 1733005554.6814258,
+                "auxillary_file_paths": [
+                    "results/results/Raycasts2D_003/Target2D_Raycasts/Target2D_Raycasts-803013.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 803013,
+            "file_path": "results/results/Raycasts2D_003/Target2D_Raycasts.onnx",
+            "reward": 7.225876331329346,
+            "creation_time": 1733005554.6814258,
+            "auxillary_file_paths": [
+                "results/results/Raycasts2D_003/Target2D_Raycasts/Target2D_Raycasts-803013.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.5.1+cu124"
+    }
+}

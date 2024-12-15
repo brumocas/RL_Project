@@ -1,0 +1,65 @@
+{
+    "Maze_Raycasts": {
+        "checkpoints": [
+            {
+                "steps": 999994,
+                "file_path": "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-999994.onnx",
+                "reward": null,
+                "creation_time": 1734286303.4456847,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-999994.pt"
+                ]
+            },
+            {
+                "steps": 1499881,
+                "file_path": "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-1499881.onnx",
+                "reward": 264.6330046951771,
+                "creation_time": 1734286696.0918694,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-1499881.pt"
+                ]
+            },
+            {
+                "steps": 1999976,
+                "file_path": "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-1999976.onnx",
+                "reward": null,
+                "creation_time": 1734287088.9267752,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-1999976.pt"
+                ]
+            },
+            {
+                "steps": 2322507,
+                "file_path": "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-2322507.onnx",
+                "reward": null,
+                "creation_time": 1734287404.1843188,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-2322507.pt"
+                ]
+            },
+            {
+                "steps": 2403987,
+                "file_path": "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-2403987.onnx",
+                "reward": null,
+                "creation_time": 1734288806.3156188,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-2403987.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2403987,
+            "file_path": "results/MazeRaycastsMultiple_001/Maze_Raycasts.onnx",
+            "reward": null,
+            "creation_time": 1734288806.3156188,
+            "auxillary_file_paths": [
+                "results/MazeRaycastsMultiple_001/Maze_Raycasts/Maze_Raycasts-2403987.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.5.1+cu124"
+    }
+}

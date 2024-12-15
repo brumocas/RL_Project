@@ -1,0 +1,47 @@
+{
+    "Maze_Raycasts_Grid": {
+        "checkpoints": [
+            {
+                "steps": 499986,
+                "file_path": "results/MazeRaycastsGrid_001/Maze_Raycasts_Grid/Maze_Raycasts_Grid-499986.onnx",
+                "reward": -0.601823521011016,
+                "creation_time": 1734294825.1527293,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsGrid_001/Maze_Raycasts_Grid/Maze_Raycasts_Grid-499986.pt"
+                ]
+            },
+            {
+                "steps": 999999,
+                "file_path": "results/MazeRaycastsGrid_001/Maze_Raycasts_Grid/Maze_Raycasts_Grid-999999.onnx",
+                "reward": -0.5928888916969299,
+                "creation_time": 1734295483.5209363,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsGrid_001/Maze_Raycasts_Grid/Maze_Raycasts_Grid-999999.pt"
+                ]
+            },
+            {
+                "steps": 1133066,
+                "file_path": "results/MazeRaycastsGrid_001/Maze_Raycasts_Grid/Maze_Raycasts_Grid-1133066.onnx",
+                "reward": -0.5799999982118607,
+                "creation_time": 1734295660.1652844,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsGrid_001/Maze_Raycasts_Grid/Maze_Raycasts_Grid-1133066.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1133066,
+            "file_path": "results/MazeRaycastsGrid_001/Maze_Raycasts_Grid.onnx",
+            "reward": -0.5799999982118607,
+            "creation_time": 1734295660.1652844,
+            "auxillary_file_paths": [
+                "results/MazeRaycastsGrid_001/Maze_Raycasts_Grid/Maze_Raycasts_Grid-1133066.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.5.1+cu124"
+    }
+}
