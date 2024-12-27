@@ -21,20 +21,20 @@ public class Menu : MonoBehaviour
     public void LoadMenu()
     {
         Debug.Log("Loading Menu...");
-        SceneManager.LoadScene(2); // Replace with the actual scene index or name
+        SceneManager.LoadScene(0); // Replace with the actual scene index or name
     }
 
     // Example methods for your three scenes
     public void LoadScene1()
     {
         Debug.Log("Loading Scene 1...");
-        SceneManager.LoadScene(0); // Replace with the actual scene index or name
+        SceneManager.LoadScene(1); // Replace with the actual scene index or name
     }
 
     public void LoadScene2()
     {
         Debug.Log("Loading Scene 2...");
-        SceneManager.LoadScene(1); // Replace with the actual scene index or name
+        SceneManager.LoadScene(2); // Replace with the actual scene index or name
     }
     
     

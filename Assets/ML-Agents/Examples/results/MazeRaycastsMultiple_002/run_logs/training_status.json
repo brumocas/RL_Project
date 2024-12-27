@@ -1,0 +1,56 @@
+{
+    "Maze_Raycasts": {
+        "checkpoints": [
+            {
+                "steps": 499977,
+                "file_path": "results/MazeRaycastsMultiple_002/Maze_Raycasts/Maze_Raycasts-499977.onnx",
+                "reward": null,
+                "creation_time": 1735329188.0309029,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsMultiple_002/Maze_Raycasts/Maze_Raycasts-499977.pt"
+                ]
+            },
+            {
+                "steps": 524771,
+                "file_path": "results/MazeRaycastsMultiple_002/Maze_Raycasts/Maze_Raycasts-524771.onnx",
+                "reward": null,
+                "creation_time": 1735329209.459571,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsMultiple_002/Maze_Raycasts/Maze_Raycasts-524771.pt"
+                ]
+            },
+            {
+                "steps": 999989,
+                "file_path": "results/MazeRaycastsMultiple_002/Maze_Raycasts/Maze_Raycasts-999989.onnx",
+                "reward": 254.4674596786499,
+                "creation_time": 1735329641.8016384,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsMultiple_002/Maze_Raycasts/Maze_Raycasts-999989.pt"
+                ]
+            },
+            {
+                "steps": 1008693,
+                "file_path": "results/MazeRaycastsMultiple_002/Maze_Raycasts/Maze_Raycasts-1008693.onnx",
+                "reward": null,
+                "creation_time": 1735329648.3551142,
+                "auxillary_file_paths": [
+                    "results/MazeRaycastsMultiple_002/Maze_Raycasts/Maze_Raycasts-1008693.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1008693,
+            "file_path": "results/MazeRaycastsMultiple_002/Maze_Raycasts.onnx",
+            "reward": null,
+            "creation_time": 1735329648.3551142,
+            "auxillary_file_paths": [
+                "results/MazeRaycastsMultiple_002/Maze_Raycasts/Maze_Raycasts-1008693.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.5.1+cu124"
+    }
+}

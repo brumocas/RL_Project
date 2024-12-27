@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class Maze_Raycasts : Agent
 {
     [SerializeField] private List<Transform> targets = new List<Transform>(); // List of targets
-    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float moveSpeed = 5f;
 
     private int targetCounter = 0;
     private Rigidbody rb;
@@ -24,7 +24,7 @@ public class Maze_Raycasts : Agent
     public override void OnEpisodeBegin()
     {
         // Reset agent's position and rotation
-        transform.localPosition = new Vector3(-21f, 0.5f, -21f);
+        transform.localPosition = new Vector3(-20.5f, 0.5f, -21f);
         transform.localRotation = Quaternion.Euler(0, 0, 0);
         rb.velocity = Vector3.zero;
 
@@ -36,7 +36,7 @@ public class Maze_Raycasts : Agent
     private void SetTargetPositions()
     {
         // Using the target list to set their positions
-        targets[0].localPosition = new Vector3(-21f, 1.22f, -3f);
+        targets[0].localPosition = new Vector3(-20.5f, 1.22f, -3f);
         targets[1].localPosition = new Vector3(-21f, 1.22f, 22f);
         targets[2].localPosition = new Vector3(-5f, 1.22f, 22f);
         targets[3].localPosition = new Vector3(-5f, 1.22f, 16f);
@@ -54,6 +54,7 @@ public class Maze_Raycasts : Agent
         targets[15].localPosition = new Vector3(16f, 1.22f, -22f);
         targets[16].localPosition = new Vector3(22f, 1.22f, -22f);
         targets[17].localPosition = new Vector3(22f, 1.22f, 22f);
+        
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -89,6 +90,10 @@ public class Maze_Raycasts : Agent
         // Apply movement and rotation
         rb.MovePosition(transform.position + transform.forward * moveForward * moveSpeed * Time.deltaTime);
         transform.Rotate(0f, moveRotate * (moveSpeed / 2), 0f, Space.Self);
+
+        // Rotation Penalty
+        float rotationPenalty = Mathf.Abs(actions.ContinuousActions[0]);
+        AddReward(-rotationPenalty * 0.01f);
 
         // Add small time penalty to encourage faster learning
         AddReward(-0.001f);
@@ -132,6 +137,6 @@ public class Maze_Raycasts : Agent
     private void DeactivateTarget(int targetIndex)
     {
         // Deactivate target by moving it off-screen
-        targets[targetIndex].localPosition = new Vector3(-100f, -100f, 100f);
+        targets[targetIndex].localPosition = new Vector3(-0f, -100f, 100f);
     }
 }
