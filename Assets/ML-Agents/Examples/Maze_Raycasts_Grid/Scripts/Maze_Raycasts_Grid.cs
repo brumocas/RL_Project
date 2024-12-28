@@ -37,7 +37,7 @@ public class Maze_Raycasts_Grid : Agent
         base.Initialize();
         // Total cells in grid = (gridSize + 1) * (gridSize + 1)
         int totalGridObservations = (gridSize + 1) * (gridSize + 1); 
-        GetComponent<BehaviorParameters>().BrainParameters.VectorObservationSize = 6 + totalGridObservations;
+        GetComponent<BehaviorParameters>().BrainParameters.VectorObservationSize = 2 + 6 + totalGridObservations;
     }
 
     private void SetupComponents()
@@ -206,7 +206,7 @@ public override void OnEpisodeBegin()
     // Set a fixed position for the first target
     if (targets != null && targets.Length > 0)
     {
-        targets[0].localPosition = new Vector3(22f, 1.22f, 22f); // Example fixed position
+        targets[0].localPosition = new Vector3(0f, 1.22f, 0f); // Example fixed position
     }
 }
 
@@ -230,6 +230,17 @@ public override void OnEpisodeBegin()
                 sensor.AddObservation(visitedCells[x, z] ? 1.0f : 0.0f);
             }
         }
+
+        // Add target position
+        // Add target positions (2 observations per target: relative x and z)
+        foreach (var target in targets)
+        {
+            Vector3 relativePos = mazeParent.InverseTransformPoint(target.position) - mazeParent.InverseTransformPoint(transform.position);
+            // Normalize relative positions to improve learning (optional)
+            sensor.AddObservation(relativePos.x / MAZE_MAX);
+            sensor.AddObservation(relativePos.z / MAZE_MAX);
+        }
+
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -240,6 +251,11 @@ public override void OnEpisodeBegin()
         rb.MovePosition(transform.position + transform.forward * moveForward * moveSpeed * Time.deltaTime);
         transform.Rotate(0f, moveRotate * moveSpeed, 0f, Space.Self);
 
+        // Rotation penalty
+        float rotationPenalty = Mathf.Abs(actions.ContinuousActions[0]);
+        AddReward(-rotationPenalty * 0.001f);
+        
+        // Grid reward/penalty
         Vector2Int newCell = WorldToGrid(transform.position);
         if (visitedCells[newCell.x, newCell.y])
         {
@@ -251,7 +267,8 @@ public override void OnEpisodeBegin()
             CreateVisitMarker(newCell);
         }
         visitedCells[newCell.x, newCell.y] = true;
-
+        
+        // Time step penalty
         AddReward(stepPenalty);
     }
 
@@ -261,9 +278,9 @@ public override void OnEpisodeBegin()
         for (int attempts = 0; attempts < maxAttempts; attempts++)
         {
             Vector3 potentialPosition = new Vector3(
-                Random.Range(MAZE_MIN + cellSize, MAZE_MAX - cellSize),
+                Random.Range(-15 + cellSize, 18 - cellSize),
                 yHeight,
-                Random.Range(MAZE_MIN + cellSize, MAZE_MAX - cellSize)
+                Random.Range(-23 + cellSize, 12 - cellSize)
             );
 
             if (IsValidPosition(potentialPosition))
