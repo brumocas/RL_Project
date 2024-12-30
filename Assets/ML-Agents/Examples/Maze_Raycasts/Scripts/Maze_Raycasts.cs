@@ -113,7 +113,7 @@ public class Maze_Raycasts : Agent
         {
             Debug.Log("Hit Wall! Applying penalty.");
             AddReward(-0.5f);
-            EndEpisode();
+            //EndEpisode();
             return;
         }
 

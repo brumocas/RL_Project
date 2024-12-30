@@ -23,21 +23,103 @@ public class Maze_Raycasts_Grid : Agent
     private Transform mazeParent;
     private Transform[] targets;
     private Rigidbody rb;
+    
     private int gridSize;
     private bool[,] visitedCells;
     private GameObject[,] visitedMarkers;
+    private GameObject gridContainer;
 
 
     public override void Initialize()
     {
+        base.Initialize();
+
+        // first method to be called
         SetupComponents();
         InitializeGrid();
         FindTargets();
+        CreateGridVisualization();
 
-        base.Initialize();
         // Total cells in grid = (gridSize + 1) * (gridSize + 1)
         int totalGridObservations = (gridSize + 1) * (gridSize + 1); 
         GetComponent<BehaviorParameters>().BrainParameters.VectorObservationSize = 2 + 6 + totalGridObservations;
+    }
+
+    private void CreateGridVisualization()
+    {
+        // Create a container for the grid cells if it doesn't exist
+        GameObject gridContainer = new GameObject("GridVisualization");
+        gridContainer.transform.parent = mazeParent;
+
+        // Create cells for the entire grid
+        for (int x = 0; x <= gridSize; x++)
+        {
+            for (int z = 0; z <= gridSize; z++)
+            {
+                GameObject cell = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                cell.transform.parent = gridContainer.transform;
+                
+                // Position each cell in the world using your existing GridToWorld method
+                Vector2Int gridPos = new Vector2Int(x, z);
+                Vector3 worldPos = new Vector3(
+                    x * cellSize + MAZE_MIN,
+                    1.22f,  // Same height as your maze
+                    z * cellSize + MAZE_MIN
+                );
+                cell.transform.position = mazeParent.TransformPoint(worldPos);
+                
+                // Rotate to lay flat
+                cell.transform.rotation = Quaternion.Euler(90, 0, 0);
+                
+                // Scale to fit your cell size
+                cell.transform.localScale = new Vector3(cellSize * 0.9f, cellSize * 0.9f, 1);
+
+                // Set a transparent material                
+                Material mat = new Material(Shader.Find("Standard"));
+                mat.SetFloat("_Mode", 3); // Set transparent mode
+                mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                mat.SetInt("_ZWrite", 0);
+                mat.DisableKeyword("_ALPHATEST_ON");
+                mat.EnableKeyword("_ALPHABLEND_ON");
+                mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                mat.renderQueue = 3000;
+                mat.color = new Color(0, 0, 0, 0); // Start fully transparent
+                
+                var renderer = cell.GetComponent<Renderer>();
+                renderer.material = mat;
+                
+                // Remove the collider since we don't need physics
+                Destroy(cell.GetComponent<Collider>());
+                
+                // Store reference in your array
+                visitedMarkers[x, z] = cell;
+            }
+        }
+    }
+    private void InitializeGrid()
+    {
+        gridSize = Mathf.RoundToInt((MAZE_MAX - MAZE_MIN) / cellSize);
+        visitedMarkers = new GameObject[gridSize + 1, gridSize + 1];
+        ResetVisitedCells();
+    }
+
+    private void ResetVisitedCells()
+    {
+        visitedCells = new bool[gridSize + 1, gridSize + 1];
+        
+ 
+        for (int x = 0; x <= gridSize; x++)
+        {
+            for (int z = 0; z <= gridSize; z++)
+            {
+                if (visitedMarkers[x, z] != null)
+                {
+                    var renderer = visitedMarkers[x, z].GetComponent<Renderer>();
+                    renderer.material.color = new Color(0f, 0f, 0f, 0f); // Reset to fully transparent
+                }
+            }
+        }
     }
 
     private void SetupComponents()
@@ -57,13 +139,6 @@ public class Maze_Raycasts_Grid : Agent
         }
     }
 
-    private void InitializeGrid()
-    {
-        gridSize = Mathf.RoundToInt((MAZE_MAX - MAZE_MIN) / cellSize);
-        visitedMarkers = new GameObject[gridSize + 1, gridSize + 1];
-        ResetVisitedCells();
-    }
-
     private void ConfigureRigidbody()
     {
         rb.isKinematic = false;
@@ -73,9 +148,6 @@ public class Maze_Raycasts_Grid : Agent
         rb.mass = 1f;
         rb.drag = 1f;
     }
-
-    
-
 
     private void FindTargets()
     {
@@ -142,73 +214,21 @@ public class Maze_Raycasts_Grid : Agent
         );
     }
 
-    private void ResetVisitedCells()
+    public override void OnEpisodeBegin()
     {
-        if (visitedMarkers != null)
+        // Reset the visited cells and markers
+        ResetVisitedCells();
+
+        // Randomize the agent's starting position
+        transform.localPosition = GenerateValidPosition(0.5f);
+        transform.localRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+
+        // Set a fixed position for the first target
+        if (targets != null && targets.Length > 0)
         {
-            for (int x = 0; x <= gridSize; x++)
-            {
-                for (int z = 0; z <= gridSize; z++)
-                {
-                    if (visitedMarkers[x, z] != null)
-                    {
-                        if (Application.isPlaying)
-                            Destroy(visitedMarkers[x, z]);
-                        else
-                            DestroyImmediate(visitedMarkers[x, z]);
-                        visitedMarkers[x, z] = null;
-                    }
-                }
-            }
+            targets[0].localPosition = new Vector3(0f, 1.22f, 0f); // Example fixed position
         }
-        
-        visitedCells = new bool[gridSize + 1, gridSize + 1];
-        visitedMarkers = new GameObject[gridSize + 1, gridSize + 1];
     }
-
-    private void CreateVisitMarker(Vector2Int cell)
-    {
-        if (visitedMarkers[cell.x, cell.y] != null) return;
-
-        GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        
-        // First set the parent, then the position
-        marker.transform.parent = mazeParent;
-        marker.transform.position = GridToWorld(cell);
-        marker.transform.localScale = new Vector3(cellSize * 0.9f, 0.02f, cellSize * 0.9f);
-
-        // Create a new transparent material
-        Material transparentMaterial = new Material(Shader.Find("Transparent/Diffuse"));
-        transparentMaterial.color = new Color(1f, 0f, 0f, 0.5f);
-        
-        // Assign the material
-        var renderer = marker.GetComponent<Renderer>();
-        renderer.material = transparentMaterial;
-        
-        // Remove collider
-        Destroy(marker.GetComponent<Collider>());
-        
-        visitedMarkers[cell.x, cell.y] = marker;
-    }
-
-    
-
-
-public override void OnEpisodeBegin()
-{
-    // Reset the visited cells and markers
-    ResetVisitedCells();
-
-    // Randomize the agent's starting position
-    transform.localPosition = GenerateValidPosition(0.5f);
-    transform.localRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
-
-    // Set a fixed position for the first target
-    if (targets != null && targets.Length > 0)
-    {
-        targets[0].localPosition = new Vector3(0f, 1.22f, 0f); // Example fixed position
-    }
-}
 
 
     public override void CollectObservations(VectorSensor sensor)
@@ -264,12 +284,42 @@ public override void OnEpisodeBegin()
         else
         {
             AddReward(nonVisitedReward);
-            CreateVisitMarker(newCell);
+            MarkCellAsVisited(newCell);
         }
         visitedCells[newCell.x, newCell.y] = true;
         
         // Time step penalty
         AddReward(stepPenalty);
+    }
+
+    // Modify how you mark visited cells
+    private void MarkCellAsVisited(Vector2Int cell)
+    {
+        if (!visitedCells[cell.x, cell.y])
+        {
+            visitedCells[cell.x, cell.y] = true;
+
+            if (visitedMarkers[cell.x, cell.y] != null)
+            {
+                var renderer = visitedMarkers[cell.x, cell.y].GetComponent<Renderer>();
+                var mat = renderer.material;
+                
+                // Ensure transparency settings are correct
+                if (!mat.HasProperty("_Mode"))
+                {
+                    mat.SetFloat("_Mode", 3);
+                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    mat.SetInt("_ZWrite", 0);
+                    mat.DisableKeyword("_ALPHATEST_ON");
+                    mat.EnableKeyword("_ALPHABLEND_ON");
+                    mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                    mat.renderQueue = 3000;
+                }
+                
+                mat.color = new Color(1f, 0f, 0f, 0.5f); // Semi-transparent red
+            }
+        }
     }
 
     private Vector3 GenerateValidPosition(float yHeight)
@@ -312,10 +362,6 @@ public override void OnEpisodeBegin()
         return true; // No collision detected
     }
 
-
-    
-
-
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var continuousActions = actionsOut.ContinuousActions;
@@ -335,36 +381,6 @@ public override void OnEpisodeBegin()
             AddReward(findTargetReward);
             EndEpisode();
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (!Application.isPlaying || visitedCells == null) return;
-
-        // Solid red with some transparency
-        Gizmos.color = new Color(1f, 0f, 0f, 0.3f); // Red with 30% opacity
-
-        for (int x = 0; x <= gridSize; x++)
-        {
-            for (int z = 0; z <= gridSize; z++)
-            {
-                if (visitedCells[x, z])
-                {
-                    // Convert grid position to world space using maze transform
-                    Vector3 worldPos = GridToWorld(new Vector2Int(x, z));
-                    
-                    // Calculate the size of the gizmo in world space
-                    Vector3 gizmoSize = new Vector3(cellSize * 0.9f, 0.1f, cellSize * 0.9f);
-                    
-                    // Draw the gizmo
-                    Matrix4x4 rotationMatrix = Matrix4x4.TRS(worldPos, mazeParent.rotation, gizmoSize);
-                    Gizmos.matrix = rotationMatrix;
-                    Gizmos.DrawCube(Vector3.zero, Vector3.one);
-                }
-            }
-        }
-        // Reset Gizmos matrix
-        Gizmos.matrix = Matrix4x4.identity;
     }
     
 }
