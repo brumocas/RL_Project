@@ -278,9 +278,9 @@ public override void OnEpisodeBegin()
         for (int attempts = 0; attempts < maxAttempts; attempts++)
         {
             Vector3 potentialPosition = new Vector3(
-                Random.Range(-15 + cellSize, 18 - cellSize),
+                Random.Range(-15f, 18f),
                 yHeight,
-                Random.Range(-23 + cellSize, 12 - cellSize)
+                Random.Range(-23f, 12f)
             );
 
             if (IsValidPosition(potentialPosition))
