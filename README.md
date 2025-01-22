@@ -32,6 +32,7 @@ RL_Project/
 
 ### 1. **Reinforcement Learning (RL)**
    - The AI agent learns to navigate the maze by interacting with the environment and receiving rewards based on its actions.
+   - The agent uses the **Proximal Policy Optimization (PPO)** algorithm, a state-of-the-art RL algorithm, to optimize its policy.
 
 ### 2. **Reward Shaping**
    - Reward shaping is implemented to guide the agent towards desirable behaviors by modifying the reward function.
@@ -48,7 +49,7 @@ RL_Project/
 ### Prerequisites
 - **Unity Hub** and **Unity Editor** (version 2021.3 or later recommended).
 - **Python** (optional, for running custom RL training scripts).
-- **ML-Agents Toolkit** (optional, for advanced RL implementations).
+- **ML-Agents Toolkit**: Required for PPO implementation and training.
 
 ### Steps to Run the Project
 1. **Clone the Repository**:
@@ -60,15 +61,36 @@ RL_Project/
 2. **Open the Project in Unity**:
    - Launch Unity Hub and open the `RL_Project` folder as a new project.
    - Ensure all dependencies are imported correctly.
+
+3. **Set Up ML-Agents Toolkit**:
+   - Install the ML-Agents Toolkit by following the official [installation guide](https://github.com/Unity-Technologies/ml-agents/blob/release_20_docs/docs/Installation.md).
+   - Ensure the PPO algorithm is configured in the `TrainerConfig.yaml` file.
+
+4. **Train the Agent**:
+   - Use the ML-Agents CLI to train the agent:
+     ```bash
+     mlagents-learn config/TrainerConfig.yaml --run-id=maze_solver_ppo
+     ```
+   - Monitor training progress using TensorBoard.
+
+5. **Run the Game**:
+   - Open the desired scene from the `Assets/Scenes/` folder (e.g., `Menu.unity`).
+   - Click the **Play** button in the Unity Editor to start the game.
+
+6. **Build the Executable** (Optional):
+   - Go to `File > Build Settings`.
+   - Select the target platform (Linux, Mac, or Windows).
+   - Click **Build** and choose the output directory.
+
 ---
 
 ## Technologies Used
 
 - **Unity**: Game engine for creating the maze environment and visualizing the agent's behavior.
-- **Reinforcement Learning (RL)**: Core technique for training the agent using algorithms like Q-learning or DQN.
+- **Reinforcement Learning (RL)**: Core technique for training the agent using the **PPO algorithm**.
 - **Reward Shaping**: Technique to modify the reward function and improve learning efficiency.
 - **C#**: Programming language for Unity scripts and RL implementation.
-- **ML-Agents Toolkit** (optional): For advanced RL implementations and integration with Python.
+- **ML-Agents Toolkit**: For PPO implementation, training, and integration with Unity.
 
 ---
 
